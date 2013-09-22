@@ -3,7 +3,7 @@ Tracker Algorithms
 
 .. highlight:: cpp
 
-Two algorithms will be implemented soon, the first is MIL (Multiple Instance Learning) [MIL]_ and second is Online Boosting [OLB]_.
+The following algorithms are implemented at the moment.
 
 .. [MIL] B Babenko, M-H Yang, and S Belongie, Visual Tracking with Online Multiple Instance Learning, In CVPR, 2009
 
@@ -13,7 +13,8 @@ TrackerBoosting
 ---------------
 
 This is a real-time object tracking based on a novel on-line version of the AdaBoost algorithm.
-The classifier uses the surrounding background as negative examples in update step to avoid the drifting problem.
+The classifier uses the surrounding background as negative examples in update step to avoid the drifting problem. The implementation is based on
+[OLB]_.
 
 .. ocv:class:: TrackerBoosting
 
@@ -33,10 +34,39 @@ Implementation of TrackerBoosting from :ocv:class:`Tracker`::
 
    };
 
+TrackerBoosting::Params
+-----------------------------------------------------------------------
+
+.. ocv:struct:: TrackerBoosting::Params
+
+List of BOOSTING parameters::
+
+   struct CV_EXPORTS Params
+   {
+    Params();
+    int numClassifiers;  //the number of classifiers to use in a OnlineBoosting algorithm
+    float samplerOverlap;  //search region parameters to use in a OnlineBoosting algorithm
+    float samplerSearchFactor;  // search region parameters to use in a OnlineBoosting algorithm
+    int iterationInit;  //the initial iterations
+    int featureSetNumFeatures;  // #features
+
+    void read( const FileNode& fn );
+    void write( FileStorage& fs ) const;
+   };
+
+TrackerBoosting::TrackerBoosting
+-----------------------------------------------------------------------
+
+Constructor
+
+.. ocv:function:: bool TrackerBoosting::TrackerBoosting( const TrackerBoosting::Params &parameters = TrackerBoosting::Params() )
+
+    :param parameters: BOOSTING parameters :ocv:struct:`TrackerBoosting::Params`
+
 TrackerMIL
 ----------
 
-The MIL algorithm trains a classifier in an online manner to separate the object from the background. Multiple Instance Learning avoids the drift problem for a robust tracking.
+The MIL algorithm trains a classifier in an online manner to separate the object from the background. Multiple Instance Learning avoids the drift problem for a robust tracking. The implementation is based on [MIL]_.
 
 Original code can be found here http://vision.ucsd.edu/~bbabenko/project_miltrack.shtml
 
@@ -90,32 +120,43 @@ Constructor
 
     :param parameters: MIL parameters :ocv:struct:`TrackerMIL::Params`
 
+TrackerPF
+----------
 
-TrackerBoosting::Params
+This tracker is based on a particle filtering algorithm.
+
+.. ocv:class:: TrackerPF
+
+Implementation of TrackerPF from :ocv:class:`Tracker`::
+
+   class CV_EXPORTS_W TrackerPF : public Tracker
+   {
+    public:
+
+     TrackerPF( const TrackerPF::Params &parameters = TrackerPF::Params() );
+
+     virtual ~TrackerPF();
+
+     void read( const FileNode& fn );
+     void write( FileStorage& fs ) const;
+
+   };
+
+TrackerPF::Params
 ------------------
 
-.. ocv:struct:: TrackerBoosting::Params
+.. ocv:struct:: TrackerPF::Params
 
-List of BOOSTING parameters::
+List of PF parameters::
 
    struct CV_EXPORTS Params
    {
-    Params();
-    int numClassifiers;  //the number of classifiers to use in a OnlineBoosting algorithm
-    float samplerOverlap;  //search region parameters to use in a OnlineBoosting algorithm
-    float samplerSearchFactor;  // search region parameters to use in a OnlineBoosting algorithm
-    int iterationInit;  //the initial iterations
-    int featureSetNumFeatures;  // #features
+     Params();
+     void read( const FileNode& fn );
+     void write( FileStorage& fs ) const;
 
-    void read( const FileNode& fn );
-    void write( FileStorage& fs ) const;
+     int iterationNum;
+     int particlesNum;
+     double alpha;
+     Mat_<double> std; 
    };
-
-TrackerBoosting::TrackerBoosting
-----------------------
-
-Constructor
-
-.. ocv:function:: bool TrackerBoosting::TrackerBoosting( const TrackerBoosting::Params &parameters = TrackerBoosting::Params() )
-
-    :param parameters: BOOSTING parameters :ocv:struct:`TrackerBoosting::Params`

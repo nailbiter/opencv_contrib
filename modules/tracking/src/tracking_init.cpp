@@ -49,6 +49,8 @@ CV_INIT_ALGORITHM(TrackerMIL, "TRACKER.MIL",);
 
 CV_INIT_ALGORITHM(TrackerBoosting, "TRACKER.BOOSTING",);
 
+CV_INIT_ALGORITHM(TrackerPF, "TRACKER.PF",);
+
 bool initModule_tracking(void)
 {
   bool all = true;
