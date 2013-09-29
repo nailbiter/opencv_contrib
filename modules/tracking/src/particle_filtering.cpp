@@ -92,6 +92,7 @@ namespace cv{
     }
     TrackerPF::TrackerPF( const TrackerPF::Params &parameters){
         params=parameters;
+        isInit=false;
     }
     bool TrackerPF::initImpl( const Mat& image, const Rect& boundingBox ){
         model=Ptr<TrackerModel>(new TrackerModelPF(params,image,boundingBox));

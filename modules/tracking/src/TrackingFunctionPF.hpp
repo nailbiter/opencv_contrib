@@ -38,7 +38,6 @@ namespace cv{
         for(int i=0;i<img.rows;i++){
             for(int j=0;j<img.cols;j++){
                 Vec3f pt=hsv.at<Vec3f>(i,j);
-                Vec3b v=img.at<Vec3b>(i,j);
 
                 /*dprintf(("%d %d\n",i,j));
                 dprintf((" (%d %d %d)->(%g %g %g)\n",(int)v[0],(int)v[1],(int)v[2],pt.val[0],pt.val[1],pt.val[2]));
